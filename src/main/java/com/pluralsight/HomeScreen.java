@@ -12,7 +12,7 @@ public class HomeScreen {
 
 
     private static ArrayList<Transaction> transactions = new ArrayList<Transaction>();
-    private static final String FILE_NAME = "transactions.csv";
+    private static final String FILE_NAME = "transaction.csv";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm:ss";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
@@ -77,7 +77,7 @@ public class HomeScreen {
                 String description = value[2];
                 String vendor = value[3];
                 double total = Double.parseDouble(value[4]);
-                transactions.add(new Transaction(description, vendor, theDate, theTime, total));
+                transactions.add(new Transaction(theDate,theTime,vendor, description, total));
             }
             reader.close();
         } catch (IOException e) {
@@ -86,33 +86,48 @@ public class HomeScreen {
 
     }
 
+    public static void saveTransactions(String fileName, Transaction transaction) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME, true));
+            for (Transaction element: transactions) {
+                String userInput = String.format("%s,%s,%s,%s,%.2f", element.getDate(), element.getTime(),element.getVendor(), element.getDescription(),element.getAmount());
+                bufferedWriter.write(userInput);
+                bufferedWriter.close();
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+            System.out.println("errrrrrrrrrrrrrrro");
+        }
+    }
+
+
+
+
     private static void addDeposit(Scanner scanner) {
 
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME));
-            System.out.println("What is the date of the current deposit ? yyyy-MM-dd");
-            String input = scanner.nextLine();
-            LocalDate date = LocalDate.parse(input, DATE_FORMATTER);
+        System.out.println("What is the date of the current deposit ? yyyy-MM-dd");
+        String input = scanner.nextLine();
+        LocalDate date = LocalDate.parse(input, DATE_FORMATTER);
 
-            System.out.println("make something up: HH:mm:ss");
-            input = scanner.nextLine();
-            LocalTime time = LocalTime.parse(input, TIME_FORMATTER);
+        System.out.println("make something up: HH:mm:ss");
+        input = scanner.nextLine();
+        LocalTime time = LocalTime.parse(input, TIME_FORMATTER);
 
-            System.out.println("Vendor name");
-            String vendor = scanner.nextLine();
+        System.out.println("Vendor name");
+        String vendor = scanner.nextLine();
 
-            System.out.println("Enter some type of deposit");
-            double depositTotal = scanner.nextDouble();
-            scanner.nextLine();
+        System.out.println("Enter some type of deposit");
+        double depositTotal = scanner.nextDouble();
+        scanner.nextLine();
 
-            if (depositTotal <= 0) {
-                System.out.println("No boss only positive numbers over here");
-            }
-            Transaction deposit = new Transaction("Description", vendor, date, time, depositTotal);
-            transactions.add(deposit);
-        } catch (IOException e) {
-            System.out.println("Big Fella that's wrong!");
+        if (depositTotal <= 0) {
+            System.out.println("No boss only positive numbers over here");
         }
+        Transaction deposit = new Transaction(date, time, "description", vendor, depositTotal);
+        transactions.add(deposit);
+
+        saveTransactions("transaction.csv", deposit);
     }
 
     private static void addPayment(Scanner scanner) {
@@ -136,11 +151,14 @@ public class HomeScreen {
             if (paymentAmount <= 0) {
                 System.out.println("Ya done messed up this time buddy try again, only positive numbers");
             }
-            Transaction payment = new Transaction("Description", vendor, date, time, paymentAmount);
+            Transaction payment = new Transaction(date, time, "description", vendor, paymentAmount);
             transactions.add(payment);
+
+            saveTransactions("transaction.csv", payment);
         } catch (IOException e) {
             System.out.println("Try again");
         }
+
     }
 
 
