@@ -221,16 +221,27 @@ public class HomeScreen {
             switch (input) {
                 case "1":
                     LocalDate thisMonth = LocalDate.now();
-
+                    //uses the ye
+                    LocalDate beginningMonth = LocalDate.of(thisMonth.getYear(), thisMonth.getMonth(), 1);
+                    break;
 
                 case "2":
                     LocalDate previousMonth = LocalDate.now();
-
+                    LocalDate beginningOfLastMonth = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1,1);
+                    LocalDate endingOfLastMonth = beginningOfLastMonth.plusDays(beginningOfLastMonth.lengthOfMonth() -1);
+                    System.out.println(beginningOfLastMonth + " " + endingOfLastMonth);
+                    break;
                 case "3":
                     LocalDate currentYear = LocalDate.now();
+                    LocalDate thisYear = LocalDate.of(currentYear.getYear(), currentYear.getDayOfYear(), 1);
+                    break;
 
                 case "4":
                     LocalDate previousYear = LocalDate.now();
+                    LocalDate beginningOfLastYear = LocalDate.of(LocalDate.now().getYear() -1,1,1);
+                    LocalDate endingOfPreviousYear = beginningOfLastYear.plusDays(beginningOfLastYear.lengthOfYear()-1);
+                    System.out.println(beginningOfLastYear + " " + endingOfPreviousYear);
+                    break;
 
                 case "5":
                     System.out.println("What is the vendor name ?");
