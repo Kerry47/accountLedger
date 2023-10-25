@@ -220,15 +220,20 @@ public class HomeScreen {
 
             switch (input) {
                 case "1":
+                    LocalDate thisMonth = LocalDate.now();
+
 
                 case "2":
+                    LocalDate previousMonth = LocalDate.now();
 
                 case "3":
-
+                    LocalDate currentYear = LocalDate.now();
 
                 case "4":
+                    LocalDate previousYear = LocalDate.now();
 
                 case "5":
+                    System.out.println("What is the vendor name ?");
 
                 case "0":
                     running = false;
