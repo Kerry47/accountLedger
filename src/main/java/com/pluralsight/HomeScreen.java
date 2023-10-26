@@ -1,11 +1,13 @@
 package com.pluralsight;
 
+import javax.xml.crypto.dsig.spec.XPathType;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Filter;
 
 
 public class HomeScreen {
@@ -17,7 +19,6 @@ public class HomeScreen {
     private static final String TIME_FORMAT = "HH:mm:ss";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_FORMAT);
-
     public static void main(String[] args) {
         loadTransactions(FILE_NAME);
         Scanner scanner = new Scanner(System.in);
@@ -69,7 +70,6 @@ public class HomeScreen {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String input;
-            reader.readLine();
             while ((input = reader.readLine()) != null) {
                 String[] value = input.split("\\|");
                 LocalDate theDate = LocalDate.parse(value[0], DATE_FORMATTER);
@@ -78,6 +78,7 @@ public class HomeScreen {
                 String vendor = value[3];
                 double total = Double.parseDouble(value[4]);
                 transactions.add(new Transaction(theDate,theTime,vendor, description, total));
+
             }
             reader.close();
         } catch (IOException e) {
@@ -89,16 +90,16 @@ public class HomeScreen {
     public static void saveTransactions(String fileName, Transaction transaction) {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME, true));
-            for (Transaction element: transactions) {
-                String userInput = String.format("%s,%s,%s,%s,%.2f", element.getDate(), element.getTime(),element.getVendor(), element.getDescription(),element.getAmount());
+                String userInput = String.format("\n%s|%s|%s|%s|%.2f", transaction.getDate(), transaction.getTime(),transaction.getVendor(),
+                        transaction.getDescription(),transaction.getAmount());
                 bufferedWriter.write(userInput);
-                bufferedWriter.close();
-            }
 
+            bufferedWriter.close();
         }catch (IOException e){
             e.printStackTrace();
             System.out.println("errrrrrrrrrrrrrrro");
         }
+
     }
 
 
@@ -114,6 +115,9 @@ public class HomeScreen {
         input = scanner.nextLine();
         LocalTime time = LocalTime.parse(input, TIME_FORMATTER);
 
+        System.out.println("Give a valid description: ");
+        String description = scanner.nextLine();
+
         System.out.println("Vendor name");
         String vendor = scanner.nextLine();
 
@@ -121,10 +125,10 @@ public class HomeScreen {
         double depositTotal = scanner.nextDouble();
         scanner.nextLine();
 
-        if (depositTotal <= 0) {
-            System.out.println("No boss only positive numbers over here");
+        if (depositTotal >= 0) {
+            System.out.println("Good stuff buddy boy you made a deposit");
         }
-        Transaction deposit = new Transaction(date, time, "description", vendor, depositTotal);
+        Transaction deposit = new Transaction(date, time, description, vendor, depositTotal);
         transactions.add(deposit);
 
         saveTransactions("transaction.csv", deposit);
@@ -132,8 +136,6 @@ public class HomeScreen {
 
     private static void addPayment(Scanner scanner) {
 
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME));
             System.out.println("Add a payment date: yyyy-MM-dd ");
             String input = scanner.nextLine();
             LocalDate date = LocalDate.parse(input, DATE_FORMATTER);
@@ -142,22 +144,24 @@ public class HomeScreen {
             input = scanner.nextLine();
             LocalTime time = LocalTime.parse(input, TIME_FORMATTER);
 
+            System.out.println("What is the description: ");
+            String description = scanner.nextLine();
+
             System.out.println("Ask the damn vendor a question kerry c'mon ");
             String vendor = scanner.nextLine();
 
             System.out.println("amount of payment");
-            double paymentAmount = scanner.nextDouble();
+            double paymentAmount = scanner.nextDouble() * -1;
             scanner.nextLine();
             if (paymentAmount <= 0) {
-                System.out.println("Ya done messed up this time buddy try again, only positive numbers");
+                System.out.println("Ya done good buddy you made a payment!");
             }
-            Transaction payment = new Transaction(date, time, "description", vendor, paymentAmount);
+            Transaction payment = new Transaction(date, time, description , vendor, paymentAmount);
             transactions.add(payment);
-
             saveTransactions("transaction.csv", payment);
-        } catch (IOException e) {
-            System.out.println("Try again");
-        }
+            if (paymentAmount >=0){
+                System.out.println("Ya done messed up only positive numbers over here");
+            }
 
     }
 
@@ -191,7 +195,7 @@ public class HomeScreen {
                 case "H":
                     running = false;
                 default:
-                    System.out.println("Invalid option");
+                    System.out.println("Bye see you soon");
                     break;
             }
         }
@@ -218,7 +222,9 @@ public class HomeScreen {
     private static void displayPayments() {
 
             for(Transaction transaction : transactions){
+                if (transaction.getAmount() <=0){
                 System.out.println(transaction);
+                }
             }
     }
 
@@ -261,12 +267,15 @@ public class HomeScreen {
                     break;
 
                 case "5":
+                    FilterOne filterOne = new FilterOne();
                     System.out.println("What is the vendor name ?");
-
+                    String vendor = scanner.nextLine();
+                    FilterOne.filterTransactionsByVendor(vendor, transactions);
+                    break;
                 case "0":
                     running = false;
                 default:
-                    System.out.println("Invalid option");
+                    System.out.println("By see you soon.");
                     break;
             }
         }
