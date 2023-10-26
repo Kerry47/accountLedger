@@ -1,13 +1,10 @@
 package com.pluralsight;
-
-import javax.xml.crypto.dsig.spec.XPathType;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Filter;
 
 
 public class HomeScreen {
@@ -97,7 +94,7 @@ public class HomeScreen {
             bufferedWriter.close();
         }catch (IOException e){
             e.printStackTrace();
-            System.out.println("errrrrrrrrrrrrrrro");
+            System.out.println("error");
         }
 
     }
@@ -111,7 +108,7 @@ public class HomeScreen {
         String input = scanner.nextLine();
         LocalDate date = LocalDate.parse(input, DATE_FORMATTER);
 
-        System.out.println("make something up: HH:mm:ss");
+        System.out.println("What time is the deposit being made : HH:mm:ss");
         input = scanner.nextLine();
         LocalTime time = LocalTime.parse(input, TIME_FORMATTER);
 
@@ -245,7 +242,9 @@ public class HomeScreen {
             switch (input) {
                 case "1":
                     LocalDate thisMonth = LocalDate.now();
-                    LocalDate beginningMonth = LocalDate.of(thisMonth.getYear(), thisMonth.getMonth(), 1);
+                    LocalDate beginningMonth = LocalDate.of(LocalDate.now().getYear(), thisMonth.getMonth(), 1);
+                    LocalDate endOfMonth = beginningMonth.plusDays(beginningMonth.lengthOfMonth()-1);
+                    System.out.println(beginningMonth+ " " + endOfMonth);
                     break;
 
                 case "2":
@@ -256,7 +255,9 @@ public class HomeScreen {
                     break;
                 case "3":
                     LocalDate currentYear = LocalDate.now();
-                    LocalDate thisYear = LocalDate.of(currentYear.getYear(), currentYear.getDayOfYear(), 1);
+                    LocalDate beginningOfThisYear = LocalDate.of(LocalDate.now().getYear(), 1,1);
+                    LocalDate endingOfThisYear = beginningOfThisYear.plusDays(beginningOfThisYear.lengthOfYear()-1);
+                    System.out.println(beginningOfThisYear +" "+ endingOfThisYear);
                     break;
 
                 case "4":
