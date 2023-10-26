@@ -239,7 +239,6 @@ public class HomeScreen {
             switch (input) {
                 case "1":
                     LocalDate thisMonth = LocalDate.now();
-                    //uses the ye
                     LocalDate beginningMonth = LocalDate.of(thisMonth.getYear(), thisMonth.getMonth(), 1);
                     break;
 
