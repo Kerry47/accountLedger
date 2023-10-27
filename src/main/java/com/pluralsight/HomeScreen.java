@@ -144,7 +144,7 @@ public class HomeScreen {
             System.out.println("What is the description: ");
             String description = scanner.nextLine();
 
-            System.out.println("Ask the damn vendor a question kerry c'mon ");
+            System.out.println("Please provide an adequate vendor name: ");
             String vendor = scanner.nextLine();
 
             System.out.println("amount of payment");
@@ -241,6 +241,7 @@ public class HomeScreen {
 
             switch (input) {
                 case "1":
+                    System.out.println("Here are the transactions from Month to date: ");
                     LocalDate thisMonth = LocalDate.now();
                     LocalDate beginningMonth = LocalDate.of(LocalDate.now().getYear(), thisMonth.getMonth(), 1);
                     LocalDate endOfMonth = beginningMonth.plusDays(beginningMonth.lengthOfMonth()-1);
@@ -248,12 +249,14 @@ public class HomeScreen {
                     break;
 
                 case "2":
+                    System.out.println("Here are the transactions from the previous Month: ");
                     LocalDate previousMonth = LocalDate.now();
                     LocalDate beginningOfLastMonth = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1,1);
                     LocalDate endingOfLastMonth = beginningOfLastMonth.plusDays(beginningOfLastMonth.lengthOfMonth() -1);
                     System.out.println(beginningOfLastMonth + " " + endingOfLastMonth);
                     break;
                 case "3":
+                    System.out.println("Here are the transactions for the current Year: ");
                     LocalDate currentYear = LocalDate.now();
                     LocalDate beginningOfThisYear = LocalDate.of(LocalDate.now().getYear(), 1,1);
                     LocalDate endingOfThisYear = beginningOfThisYear.plusDays(beginningOfThisYear.lengthOfYear()-1);
@@ -261,6 +264,7 @@ public class HomeScreen {
                     break;
 
                 case "4":
+                    System.out.println("Here are the transactions from the previous Year: ");
                     LocalDate previousYear = LocalDate.now();
                     LocalDate beginningOfLastYear = LocalDate.of(LocalDate.now().getYear() -1,1,1);
                     LocalDate endingOfPreviousYear = beginningOfLastYear.plusDays(beginningOfLastYear.lengthOfYear()-1);
@@ -276,7 +280,7 @@ public class HomeScreen {
                 case "0":
                     running = false;
                 default:
-                    System.out.println("By see you soon.");
+                    System.out.println("By see you soon!");
                     break;
             }
         }
